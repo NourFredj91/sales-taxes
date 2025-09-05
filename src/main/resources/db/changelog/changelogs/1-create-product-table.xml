@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <changeSet author="nfredj" id="1-create-product-table">
+        <createTable tableName="product">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_product" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price_ht" type="DECIMAL(12,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_type" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="imported" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="quantity" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="nfredj" id="1-create-product-table-2">
+        <sql><![CDATA[
+            ALTER TABLE product
+                ADD CONSTRAINT ck_product_type
+                    CHECK (product_type IN ('BOOK','FOOD','MEDICAL','OTHER'));
+            ]]></sql>
+    </changeSet>
+
+    <changeSet author="nfredj" id="1-create-product-table-3">
+        <sql><![CDATA[
+            ALTER TABLE product
+                ADD CONSTRAINT ck_price_ht
+                    CHECK price_ht > 0;
+            ]]></sql>
+    </changeSet>
+
+    <changeSet author="nfredj" id="1-create-product-table-4">
+        <sql><![CDATA[
+            ALTER TABLE product
+                ADD CONSTRAINT ck_quantity
+                    CHECK quantity >= 0;
+            ]]></sql>
+    </changeSet>
+</databaseChangeLog>
